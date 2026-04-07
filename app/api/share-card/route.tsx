@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
                 </div>
 
                 <p style={{ fontSize: '26px', color: '#737373', fontFamily: 'sans-serif', fontWeight: 400, margin: '0 0 64px 0' }}>
-                    That's how I felt today
+                    That&apos;s how I felt today
                 </p>
 
                 {/* Divider */}
