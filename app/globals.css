@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    background: #ffffff;
+    color: #171717;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+textarea,
+button,
+input {
+    font: inherit;
+}
+
+.font-editorial {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.thin-border {
+    border-width: 0.5px;
+}
+
+.app-shell {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+/* Gauge SVG CSS variables — toggled by .dark on <html> */
+:root {
+    --gauge-bg-arc: #eef2f7;
+    --gauge-needle: #171717;
+    --gauge-pivot: #171717;
+    --gauge-pivot-inner: #fafafa;
+    --gauge-label: #a3a3a3;
+}
+
+.dark {
+    --gauge-bg-arc: #262626;
+    --gauge-needle: #e5e5e5;
+    --gauge-pivot: #e5e5e5;
+    --gauge-pivot-inner: #0a0a0a;
+    --gauge-label: #737373;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
