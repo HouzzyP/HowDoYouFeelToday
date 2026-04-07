@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
     title: 'How Do You Feel Today?',
@@ -33,6 +34,7 @@ export default function RootLayout({
             <body className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
                 <ThemeToggle />
                 {children}
+                <Analytics />
             </body>
         </html>
     );
