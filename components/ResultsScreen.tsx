@@ -393,6 +393,16 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                             Vote again
                         </button>
                     ) : null}
+
+                    {/* Twitter link */}
+                    <a
+                        href="https://x.com/hdyfeeltoday"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 text-[12px] text-neutral-400 transition-colors hover:text-neutral-600 dark:text-neutral-600 dark:hover:text-neutral-400"
+                    >
+                        @hdyfeeltoday — daily mood summaries
+                    </a>
                 </div>
             </div>
         </div>
