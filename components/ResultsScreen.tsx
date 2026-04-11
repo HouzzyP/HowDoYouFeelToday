@@ -181,7 +181,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                 transition: 'opacity 150ms ease-in',
                 ...(ambientColor
                     ? {
-                          background: `radial-gradient(ellipse 120% 45% at 50% 0%, ${ambientColor}${isDark ? '1a' : '0e'} 0%, transparent 65%)`,
+                          background: `radial-gradient(ellipse 120% 55% at 50% 0%, ${ambientColor}${isDark ? '2d' : '1a'} 0%, transparent 70%)`,
                       }
                     : {}),
             }}
