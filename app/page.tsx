@@ -42,7 +42,7 @@ export default function Home() {
     if (!isClient) return null;
 
     return hasVoted ? (
-        <ResultsScreen myMood={myMood} myCountry={myCountry} />
+        <ResultsScreen myMood={myMood} />
     ) : (
         <VoteScreen onVoteSubmit={handleVoteSubmit} />
     );

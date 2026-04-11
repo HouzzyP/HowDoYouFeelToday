@@ -29,60 +29,50 @@ interface StatsResponse {
 
 interface ResultsScreenProps {
     myMood: number | null;
-    myCountry?: string | null;
     /** Pass a past date (YYYY-MM-DD) to render archive mode */
     date?: string;
 }
-
 
 export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
     const [stats, setStats] = useState<StatsResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [visible, setVisible] = useState(false);
-    const [countryFilter] = useState<string | null>(null);
     const [shareState, setShareState] = useState<'idle' | 'loading' | 'done'>('idle');
     const [showHeatmap, setShowHeatmap] = useState(false);
 
     const { isDark } = useTheme();
     const isArchive = Boolean(date);
 
-    const buildApiUrl = useCallback(
-        (country: string | null) => {
-            const base = date ? `/api/stats?date=${date}` : '/api/stats';
-            return country ? `${base}${date ? '&' : '?'}country=${country}` : base;
-        },
-        [date]
-    );
+    const buildApiUrl = useCallback(() => {
+        return date ? `/api/stats?date=${date}` : '/api/stats';
+    }, [date]);
 
-    const fetchStats = useCallback(
-        async (country: string | null) => {
-            try {
-                const response = await fetch(buildApiUrl(country));
-                if (!response.ok) throw new Error('Failed to fetch stats');
-                const data = await response.json();
-                setStats(data);
-                setError(null);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to load results');
-            } finally {
-                setIsLoading(false);
-                requestAnimationFrame(() => setVisible(true));
-            }
-        },
-        [buildApiUrl]
-    );
+    const fetchStats = useCallback(async () => {
+        try {
+            const response = await fetch(buildApiUrl());
+            if (!response.ok) throw new Error('Failed to fetch stats');
+            const data = await response.json();
+            setStats(data);
+            setError(null);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to load results');
+        } finally {
+            setIsLoading(false);
+            requestAnimationFrame(() => setVisible(true));
+        }
+    }, [buildApiUrl]);
 
     useEffect(() => {
         setIsLoading(true);
         setVisible(false);
-        fetchStats(countryFilter);
+        fetchStats();
 
-        if (!isArchive && !countryFilter) {
-            const interval = setInterval(() => fetchStats(null), 30000);
+        if (!isArchive) {
+            const interval = setInterval(fetchStats, 30000);
             return () => clearInterval(interval);
         }
-    }, [fetchStats, isArchive, countryFilter]);
+    }, [fetchStats, isArchive]);
 
     const handleShare = async () => {
         if (!myMood || !stats) return;
