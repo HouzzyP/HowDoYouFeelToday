@@ -229,22 +229,28 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                     <Gauge average={stats.avg} />
                 </div>
 
-                {/* Personal resonance — only shown post-vote on today's page */}
-                {myMood && !isArchive && stats.total > 0 && (
-                    <p className="mb-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
-                        <span
-                            className="text-[1.05rem] font-semibold"
-                            style={{ color: MOODS[myMood - 1].color }}
-                        >
-                            {Math.round((stats.counts[myMood - 1] / stats.total) * 100)}%
-                        </span>
-                        {' '}of people felt{' '}
-                        <span className="font-medium text-neutral-800 dark:text-neutral-200">
-                            {MOODS[myMood - 1].label}
-                        </span>
-                        {' '}today — just like you.
-                    </p>
-                )}
+                {/* Personal resonance — qualitative, only post-vote */}
+                {myMood && !isArchive && stats.total > 0 && (() => {
+                    const pct = (stats.counts[myMood - 1] / stats.total) * 100;
+                    const qualifier =
+                        pct > 50 ? 'Most people' :
+                        pct > 30 ? 'Many people' :
+                        pct > 15 ? 'Some people' :
+                        pct > 5  ? 'A few people' :
+                                   'Hardly anyone';
+                    return (
+                        <p className="mb-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                            {qualifier} felt{' '}
+                            <span
+                                className="font-medium"
+                                style={{ color: MOODS[myMood - 1].color }}
+                            >
+                                {MOODS[myMood - 1].label}
+                            </span>
+                            {' '}today — just like you.
+                        </p>
+                    );
+                })()}
 
                 {/* Daily reminder prompt — right after the emotional hook */}
                 {!isArchive && <PushPrompt />}
