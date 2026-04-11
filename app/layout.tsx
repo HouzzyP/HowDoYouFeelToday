@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { ServiceWorkerRegistrar } from '@/components/ServiceWorkerRegistrar';
 import { Analytics } from '@vercel/analytics/react';
 
 export const metadata: Metadata = {
@@ -14,6 +15,11 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
+    },
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'default',
+        title: 'HDYFT',
     },
 };
 
@@ -33,6 +39,7 @@ export default function RootLayout({
             </head>
             <body className="bg-white text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50">
                 <ThemeToggle />
+                <ServiceWorkerRegistrar />
                 {children}
                 <Analytics />
             </body>

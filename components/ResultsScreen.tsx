@@ -4,9 +4,11 @@ import { useEffect, useState, useCallback } from 'react';
 import { Gauge } from './Gauge';
 import { MoodBar } from './MoodBar';
 import { NoteCard } from './NoteCard';
-import { StreakBar } from './StreakBar';
 import { WordCloud } from './WordCloud';
+import { MoodHeatmap } from './MoodHeatmap';
+import { PushPrompt } from './PushPrompt';
 import { MOODS, COLD_START_THRESHOLD } from '@/lib/constants';
+import { useTheme } from '@/hooks/useTheme';
 
 interface StatsResponse {
     total: number;
@@ -41,6 +43,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
     const [countryFilter] = useState<string | null>(null);
     const [shareState, setShareState] = useState<'idle' | 'loading' | 'done'>('idle');
 
+    const { isDark } = useTheme();
     const isArchive = Boolean(date);
 
     const buildApiUrl = useCallback(
@@ -173,10 +176,24 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
         })
         : null;
 
+    const ambientMoodIndex =
+        stats && stats.avg > 0
+            ? Math.min(Math.max(Math.round(stats.avg) - 1, 0), 4)
+            : null;
+    const ambientColor = ambientMoodIndex !== null ? MOODS[ambientMoodIndex].color : null;
+
     return (
         <div
             className="min-h-screen px-4 py-8 sm:py-12"
-            style={{ opacity: visible ? 1 : 0, transition: 'opacity 150ms ease-in' }}
+            style={{
+                opacity: visible ? 1 : 0,
+                transition: 'opacity 150ms ease-in',
+                ...(ambientColor
+                    ? {
+                          background: `radial-gradient(ellipse 120% 45% at 50% 0%, ${ambientColor}${isDark ? '1a' : '0e'} 0%, transparent 65%)`,
+                      }
+                    : {}),
+            }}
         >
             <div className="app-shell">
                 {/* Header */}
@@ -211,8 +228,25 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                     <Gauge average={stats.avg} />
                 </div>
 
+                {/* Personal resonance — only shown post-vote on today's page */}
+                {myMood && !isArchive && stats.total > 0 && (
+                    <p className="mb-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                        <span
+                            className="text-[1.05rem] font-semibold"
+                            style={{ color: MOODS[myMood - 1].color }}
+                        >
+                            {Math.round((stats.counts[myMood - 1] / stats.total) * 100)}%
+                        </span>
+                        {' '}of people felt{' '}
+                        <span className="font-medium text-neutral-800 dark:text-neutral-200">
+                            {MOODS[myMood - 1].label}
+                        </span>
+                        {' '}today — just like you.
+                    </p>
+                )}
+
                 {/* Stat cards */}
-                <div className="mb-8 grid grid-cols-3 gap-2 sm:gap-3">
+                <div className="mb-8 grid grid-cols-2 gap-2 sm:gap-3">
                     <div className="thin-border rounded-3xl border border-neutral-200 bg-neutral-50 px-3 py-4 text-center dark:border-neutral-800 dark:bg-neutral-900 sm:px-4">
                         <div className="text-[1.7rem] font-medium text-neutral-950 dark:text-neutral-50 sm:text-[2rem]">
                             {showVoteCount ? stats.total.toLocaleString() : '\u2022\u2022\u2022'}
@@ -227,17 +261,6 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                         </div>
                         <div className="mt-1 text-[11px] font-normal text-neutral-400 dark:text-neutral-500">
                             World average
-                        </div>
-                    </div>
-                    <div className="thin-border rounded-3xl border border-neutral-200 bg-neutral-50 px-3 py-4 text-center dark:border-neutral-800 dark:bg-neutral-900 sm:px-4">
-                        <div
-                            className="text-[1.35rem] font-medium sm:text-[1.65rem]"
-                            style={{ color: MOODS[myMood ? myMood - 1 : 0]?.color }}
-                        >
-                            {myMood ? MOODS[myMood - 1]?.label : '\u2014'}
-                        </div>
-                        <div className="mt-1 text-[11px] font-normal text-neutral-400 dark:text-neutral-500">
-                            Your mood
                         </div>
                     </div>
                 </div>
@@ -266,9 +289,6 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                     <WordCloud notes={stats.notes} />
                 )}
 
-                {/* Streak bar */}
-                {!isArchive && <StreakBar />}
-
                 {/* Notes feed */}
                 <div className="mb-12">
                     <h2 className="mb-4 text-sm font-normal text-neutral-400 dark:text-neutral-500">
@@ -288,6 +308,12 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                         </p>
                     )}
                 </div>
+
+                {/* 4-week personal heatmap */}
+                {!isArchive && <MoodHeatmap />}
+
+                {/* Daily reminder prompt — only post-vote, not archive */}
+                {!isArchive && <PushPrompt />}
 
                 {/* Bottom actions */}
                 <div className="pb-4 flex flex-col items-center gap-3">
@@ -312,7 +338,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                         >
                             Back to today
                         </a>
-                    ) : (
+                    ) : process.env.NODE_ENV === 'development' ? (
                         <button
                             onClick={() => {
                                 const today = new Date().toISOString().split('T')[0];
@@ -325,7 +351,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                         >
                             Vote again
                         </button>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </div>

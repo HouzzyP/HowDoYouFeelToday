@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { MOODS, NOTE_MAX_CHARS } from '@/lib/constants';
 import { useTheme } from '@/hooks/useTheme';
+import { useStreak } from '@/hooks/useStreak';
 
 interface VoteScreenProps {
     onVoteSubmit: (mood: number, note: string) => Promise<void>;
@@ -14,6 +15,16 @@ export function VoteScreen({ onVoteSubmit }: VoteScreenProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { isDark } = useTheme();
+    const streak = useStreak();
+
+    // Streak computation (excluding today — they haven't voted yet)
+    const prevDays = streak.filter((d) => !d.isToday);
+    let streakCount = 0;
+    for (let i = prevDays.length - 1; i >= 0; i--) {
+        if (prevDays[i].mood !== null) streakCount++;
+        else break;
+    }
+    const hasStreakHistory = prevDays.some((d) => d.mood !== null);
 
     const selectedMoodData = selectedMood ? MOODS[selectedMood - 1] : null;
 
@@ -46,6 +57,42 @@ export function VoteScreen({ onVoteSubmit }: VoteScreenProps) {
                     </p>
                 </div>
 
+                {/* Streak strip — only shown if user has voted at least once before */}
+                {hasStreakHistory && (
+                    <div className="mb-8">
+                        <div className="thin-border flex items-center justify-between gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 dark:border-neutral-800 dark:bg-neutral-900">
+                            <div className="flex items-center gap-2">
+                                {streak.map((day) => {
+                                    const moodData =
+                                        day.mood !== null ? MOODS[day.mood - 1] : null;
+                                    return (
+                                        <div
+                                            key={day.date}
+                                            className="h-2.5 w-2.5 rounded-full transition-opacity"
+                                            style={{
+                                                backgroundColor: moodData
+                                                    ? moodData.color
+                                                    : isDark
+                                                    ? '#404040'
+                                                    : '#d4d4d4',
+                                                opacity: day.isToday ? 0.35 : 1,
+                                            }}
+                                            title={`${day.dayLabel}${moodData ? ` — ${moodData.label}` : ''}`}
+                                        />
+                                    );
+                                })}
+                            </div>
+                            <span className="shrink-0 text-[12px] text-neutral-500 dark:text-neutral-400">
+                                {streakCount >= 2
+                                    ? `${streakCount}-day streak`
+                                    : streakCount === 1
+                                    ? 'Voted yesterday'
+                                    : 'Restart your streak'}
+                            </span>
+                        </div>
+                    </div>
+                )}
+
                 <div className="mb-8 grid grid-cols-5 gap-2 sm:gap-3">
                     {MOODS.map((mood, index) => {
                         const moodValue = index + 1;
@@ -59,11 +106,17 @@ export function VoteScreen({ onVoteSubmit }: VoteScreenProps) {
                                 className="thin-border flex min-h-[92px] flex-col items-center justify-center rounded-2xl border px-2 py-3 text-center transition-colors duration-150"
                                 style={{
                                     backgroundColor: isSelected
-                                        ? isDark ? `${mood.color}18` : mood.bg
-                                        : isDark ? 'transparent' : '#ffffff',
+                                        ? isDark
+                                            ? `${mood.color}18`
+                                            : mood.bg
+                                        : isDark
+                                        ? 'transparent'
+                                        : '#ffffff',
                                     borderColor: isSelected
                                         ? mood.color
-                                        : isDark ? '#404040' : '#e5e5e5',
+                                        : isDark
+                                        ? '#404040'
+                                        : '#e5e5e5',
                                 }}
                                 aria-pressed={isSelected}
                             >
@@ -76,7 +129,9 @@ export function VoteScreen({ onVoteSubmit }: VoteScreenProps) {
                                     style={{
                                         color: isSelected
                                             ? mood.color
-                                            : isDark ? '#a3a3a3' : '#525252',
+                                            : isDark
+                                            ? '#a3a3a3'
+                                            : '#525252',
                                     }}
                                 >
                                     {mood.label}
