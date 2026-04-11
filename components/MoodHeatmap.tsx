@@ -53,7 +53,18 @@ export function MoodHeatmap() {
     if (days.length === 0) return null;
 
     const totalVotes = days.filter((d) => d.mood !== null && !d.isPadding).length;
-    if (totalVotes < 7) return null;
+
+    if (totalVotes < 7) {
+        return (
+            <div className="py-6 text-center">
+                <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                    {totalVotes === 0
+                        ? 'Vote daily to build your history.'
+                        : `${7 - totalVotes} more ${7 - totalVotes === 1 ? 'day' : 'days'} to unlock your history.`}
+                </p>
+            </div>
+        );
+    }
 
     const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
