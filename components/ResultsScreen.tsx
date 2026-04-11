@@ -42,6 +42,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
     const [visible, setVisible] = useState(false);
     const [countryFilter] = useState<string | null>(null);
     const [shareState, setShareState] = useState<'idle' | 'loading' | 'done'>('idle');
+    const [showHeatmap, setShowHeatmap] = useState(false);
 
     const { isDark } = useTheme();
     const isArchive = Boolean(date);
@@ -245,6 +246,9 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                     </p>
                 )}
 
+                {/* Daily reminder prompt — right after the emotional hook */}
+                {!isArchive && <PushPrompt />}
+
                 {/* Stat cards */}
                 <div className="mb-8 grid grid-cols-2 gap-2 sm:gap-3">
                     <div className="thin-border rounded-3xl border border-neutral-200 bg-neutral-50 px-3 py-4 text-center dark:border-neutral-800 dark:bg-neutral-900 sm:px-4">
@@ -267,9 +271,6 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
 
                 {/* Breakdown */}
                 <div className="mb-8">
-                    <h2 className="mb-4 text-sm font-normal text-neutral-400 dark:text-neutral-500">
-                        Breakdown
-                    </h2>
                     {MOODS.map((mood, index) => (
                         <MoodBar
                             key={index}
@@ -291,9 +292,6 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
 
                 {/* Notes feed */}
                 <div className="mb-12">
-                    <h2 className="mb-4 text-sm font-normal text-neutral-400 dark:text-neutral-500">
-                        Notes
-                    </h2>
                     {stats.notes.length > 0 ? (
                         <div className="space-y-3">
                             {stats.notes.map((note, index) => (
@@ -309,11 +307,44 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                     )}
                 </div>
 
-                {/* 4-week personal heatmap */}
-                {!isArchive && <MoodHeatmap />}
+                {/* History trigger + modal */}
+                {!isArchive && (
+                    <>
+                        <div className="mb-8 text-center">
+                            <button
+                                onClick={() => setShowHeatmap(true)}
+                                className="text-[13px] text-neutral-400 transition-colors hover:text-neutral-600 dark:text-neutral-600 dark:hover:text-neutral-400"
+                            >
+                                View your history
+                            </button>
+                        </div>
 
-                {/* Daily reminder prompt — only post-vote, not archive */}
-                {!isArchive && <PushPrompt />}
+                        {showHeatmap && (
+                            <div
+                                className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4 backdrop-blur-sm sm:items-center"
+                                onClick={() => setShowHeatmap(false)}
+                            >
+                                <div
+                                    className="w-full max-w-lg rounded-3xl bg-white p-6 dark:bg-neutral-950"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className="mb-4 flex items-center justify-between">
+                                        <span className="text-sm font-normal text-neutral-400 dark:text-neutral-500">
+                                            Your history
+                                        </span>
+                                        <button
+                                            onClick={() => setShowHeatmap(false)}
+                                            className="text-neutral-400 transition-colors hover:text-neutral-700 dark:hover:text-neutral-200"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                    <MoodHeatmap />
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
 
                 {/* Bottom actions */}
                 <div className="pb-4 flex flex-col items-center gap-3">

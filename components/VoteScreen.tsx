@@ -12,6 +12,7 @@ interface VoteScreenProps {
 export function VoteScreen({ onVoteSubmit }: VoteScreenProps) {
     const [selectedMood, setSelectedMood] = useState<number | null>(null);
     const [note, setNote] = useState('');
+    const [noteExpanded, setNoteExpanded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { isDark } = useTheme();
@@ -52,8 +53,12 @@ export function VoteScreen({ onVoteSubmit }: VoteScreenProps) {
                     <h1 className="font-serif text-[28px] font-normal leading-[1.08] text-neutral-950 dark:text-neutral-50 sm:text-[34px]">
                         How do you feel today?
                     </h1>
-                    <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-500 dark:text-neutral-400 sm:text-[15px]">
-                        One tap, one note, one global snapshot.
+                    <p className="mt-3 text-[12px] font-normal text-neutral-400 dark:text-neutral-500">
+                        {new Date().toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            timeZone: 'UTC',
+                        })}{' '}· global snapshot
                     </p>
                 </div>
 
@@ -148,10 +153,12 @@ export function VoteScreen({ onVoteSubmit }: VoteScreenProps) {
                     <textarea
                         value={note}
                         onChange={(e) => setNote(e.target.value.slice(0, NOTE_MAX_CHARS))}
+                        onFocus={() => setNoteExpanded(true)}
+                        onBlur={() => { if (!note) setNoteExpanded(false); }}
                         placeholder="Tell the world a little more."
                         maxLength={NOTE_MAX_CHARS}
-                        rows={5}
-                        className="thin-border min-h-[148px] w-full resize-none rounded-3xl border border-neutral-200 bg-white px-5 py-4 text-[15px] leading-6 text-neutral-800 outline-none transition-colors placeholder:text-neutral-400 focus:border-neutral-400 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:placeholder:text-neutral-600 dark:focus:border-neutral-600"
+                        rows={noteExpanded || note.length > 0 ? 5 : 2}
+                        className="thin-border w-full resize-none rounded-3xl border border-neutral-200 bg-white px-5 py-4 text-[15px] leading-6 text-neutral-800 outline-none transition-all duration-200 placeholder:text-neutral-400 focus:border-neutral-400 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:placeholder:text-neutral-600 dark:focus:border-neutral-600"
                     />
                     <div className="mt-2 text-right text-xs text-neutral-400 dark:text-neutral-600">
                         {note.length}/{NOTE_MAX_CHARS}
