@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { MOODS } from '@/lib/constants';
 
 interface GaugeProps {
@@ -8,7 +9,15 @@ interface GaugeProps {
 
 export function Gauge({ average }: GaugeProps) {
     const clampedAvg = Math.max(1, Math.min(5, average));
-    const needleAngle = 180 - ((clampedAvg - 1) / 4) * 180;
+    const targetAngle = 180 - ((clampedAvg - 1) / 4) * 180;
+
+    // Animate needle from leftmost (180°) to actual position
+    const [displayAngle, setDisplayAngle] = useState(180);
+
+    useEffect(() => {
+        const id = requestAnimationFrame(() => setDisplayAngle(targetAngle));
+        return () => cancelAnimationFrame(id);
+    }, [targetAngle]);
 
     const viewWidth = 320;
     const viewHeight = 180;
@@ -65,10 +74,7 @@ export function Gauge({ average }: GaugeProps) {
         );
     });
 
-    const needleRad = (needleAngle * Math.PI) / 180;
     const needleLength = 84;
-    const needleX = centerX + needleLength * Math.cos(needleRad);
-    const needleY = centerY - needleLength * Math.sin(needleRad);
     const moodIndex = Math.round(clampedAvg) - 1;
     const moodLabel = MOODS[Math.max(0, Math.min(4, moodIndex))]?.label || '';
 
@@ -84,15 +90,24 @@ export function Gauge({ average }: GaugeProps) {
                 {backgroundArcs}
                 {moodArcs}
 
-                <line
-                    x1={centerX}
-                    y1={centerY}
-                    x2={needleX}
-                    y2={needleY}
-                    stroke="var(--gauge-needle)"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                />
+                {/* Needle — rotates around center, animated via CSS transform */}
+                <g
+                    style={{
+                        transform: `rotate(${-displayAngle}deg)`,
+                        transformOrigin: `${centerX}px ${centerY}px`,
+                        transition: 'transform 900ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    }}
+                >
+                    <line
+                        x1={centerX}
+                        y1={centerY}
+                        x2={centerX + needleLength}
+                        y2={centerY}
+                        stroke="var(--gauge-needle)"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                    />
+                </g>
 
                 <circle cx={centerX} cy={centerY} r="6" fill="var(--gauge-pivot)" />
                 <circle cx={centerX} cy={centerY} r="2.5" fill="var(--gauge-pivot-inner)" />

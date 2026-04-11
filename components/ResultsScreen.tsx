@@ -225,7 +225,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                 {/* Country filter — reserved for v3 once traffic warrants it */}
 
                 {/* Gauge */}
-                <div className="mb-8">
+                <div className="mb-8" style={{ animation: 'fadeUp 400ms ease-out both', animationDelay: '0ms' }}>
                     <Gauge average={stats.avg} />
                 </div>
 
@@ -239,7 +239,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                         pct > 5  ? 'A few people' :
                                    'Hardly anyone';
                     return (
-                        <p className="mb-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                        <p className="mb-8 text-center text-sm text-neutral-500 dark:text-neutral-400" style={{ animation: 'fadeUp 400ms ease-out both', animationDelay: '80ms' }}>
                             {qualifier} felt{' '}
                             <span
                                 className="font-medium"
@@ -253,10 +253,14 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                 })()}
 
                 {/* Daily reminder prompt — right after the emotional hook */}
-                {!isArchive && <PushPrompt />}
+                {!isArchive && (
+                    <div style={{ animation: 'fadeUp 400ms ease-out both', animationDelay: '80ms' }}>
+                        <PushPrompt />
+                    </div>
+                )}
 
                 {/* Stat cards */}
-                <div className="mb-8 grid grid-cols-2 gap-2 sm:gap-3">
+                <div className="mb-8 grid grid-cols-2 gap-2 sm:gap-3" style={{ animation: 'fadeUp 400ms ease-out both', animationDelay: '160ms' }}>
                     <div className="thin-border rounded-3xl border border-neutral-200 bg-neutral-50 px-3 py-4 text-center dark:border-neutral-800 dark:bg-neutral-900 sm:px-4">
                         <div className="text-[1.7rem] font-medium text-neutral-950 dark:text-neutral-50 sm:text-[2rem]">
                             {showVoteCount ? stats.total.toLocaleString() : '\u2022\u2022\u2022'}
@@ -276,7 +280,7 @@ export function ResultsScreen({ myMood, date }: ResultsScreenProps) {
                 </div>
 
                 {/* Breakdown */}
-                <div className="mb-8">
+                <div className="mb-8" style={{ animation: 'fadeUp 400ms ease-out both', animationDelay: '240ms' }}>
                     {MOODS.map((mood, index) => (
                         <MoodBar
                             key={index}

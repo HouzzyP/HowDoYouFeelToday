@@ -53,7 +53,7 @@ export function MoodHeatmap() {
     if (days.length === 0) return null;
 
     const totalVotes = days.filter((d) => d.mood !== null && !d.isPadding).length;
-    if (totalVotes === 0) return null;
+    if (totalVotes < 7) return null;
 
     const DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
