@@ -2,17 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-    const rawData = window.atob(base64);
-    const output = new Uint8Array(rawData.length);
-    for (let i = 0; i < rawData.length; i++) {
-        output[i] = rawData.charCodeAt(i);
-    }
-    return output;
-}
-
 type State = 'idle' | 'loading' | 'granted' | 'denied' | 'unsupported';
 
 export function PushPrompt() {
@@ -30,7 +19,6 @@ export function PushPrompt() {
         }
     }, []);
 
-    // Don't render if unsupported, denied, or already subscribed
     if (state === 'unsupported' || state === 'denied' || state === 'granted') {
         return null;
     }
@@ -45,11 +33,10 @@ export function PushPrompt() {
             }
 
             const reg = await navigator.serviceWorker.ready;
+            // The Web Push API accepts the base64url string directly
             const subscription = await reg.pushManager.subscribe({
                 userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(
-                    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
-                ),
+                applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
             });
 
             await fetch('/api/push/subscribe', {
