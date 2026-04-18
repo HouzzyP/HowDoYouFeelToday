@@ -32,97 +32,169 @@ const COUNTRY_POOL: [string, number][] = [
 
 const NOTES: Record<number, string[]> = {
     1: [
+        // EN
         "Really struggling today.",
         "Everything feels heavy.",
         "Can't shake this feeling.",
         "Just want the day to be over.",
-        "Rough morning, rough afternoon.",
         "Feeling completely drained.",
         "Nothing is going right.",
-        "Wish I could skip today.",
-        "Low energy, low mood.",
-        "Hard to stay positive right now.",
         "Didn't sleep well. Paying for it now.",
-        "One of those days where everything stacks up.",
         "Feeling disconnected from everything.",
         "Anxious and tired at the same time.",
         "The world feels a bit too loud today.",
+        "Hitting a wall. Can't move forward.",
+        "Everything hurts a little today.",
+        // ES
+        "Hoy fue un día muy duro.",
+        "Me siento completamente agotado/a.",
+        "No puedo con nada hoy.",
+        "Ojalá este día terminara pronto.",
+        "Todo se siente muy pesado.",
+        "Estoy al límite, sin energía.",
+        "Me cuesta hasta respirar hoy.",
+        "Nada salió bien. Qué día.",
+        // FR
+        "Vraiment du mal à tenir aujourd'hui.",
+        "Tout semble lourd et difficile.",
+        "Je n'arrive pas à me sortir cette sensation.",
+        "J'espère que demain sera mieux.",
+        "Épuisé(e) sans raison particulière.",
+        "Le monde est trop bruyant aujourd'hui.",
+        "Rien ne va. Jour à oublier.",
+        "Je me sens déconnecté(e) de tout.",
     ],
     2: [
+        // EN
         "Not my best day.",
         "Feeling a bit off.",
         "Could be worse, could be better.",
         "Tired and unmotivated.",
         "Headache that won't go away.",
-        "Missing some people today.",
-        "Work is stressing me out.",
-        "Felt anxious most of the morning.",
         "Just going through the motions.",
         "Hard to focus on anything.",
-        "Woke up on the wrong side.",
         "Overthinking everything today.",
         "Feels like I'm running on empty.",
-        "Social battery is at zero.",
         "A bit sad, no particular reason.",
         "Things feel uncertain right now.",
         "Dragging myself through the day.",
+        // ES
+        "No es mi mejor día que digamos.",
+        "Me siento un poco desanimado/a.",
+        "Podría estar mejor, la verdad.",
+        "Cansado/a y sin muchas ganas.",
+        "Jornada difícil, mucho estrés.",
+        "Me cuesta concentrarme en algo.",
+        "Pensando demasiado en todo.",
+        "Un poco triste, sin razón clara.",
+        // FR
+        "Pas mon meilleur jour.",
+        "Je me sens un peu à côté.",
+        "Fatigué(e) et sans motivation.",
+        "Difficile de se concentrer.",
+        "Je ressasse trop de choses.",
+        "Un peu triste, sans raison précise.",
+        "Journée compliquée, beaucoup de stress.",
+        "Je tourne en rond aujourd'hui.",
     ],
     3: [
+        // EN
         "Normal day, nothing special.",
         "Getting through it.",
         "Neutral. Could go either way.",
-        "Just another Tuesday.",
         "Fine, I guess.",
         "Busy but managing.",
         "Not bad, not great.",
-        "Feeling pretty average.",
         "Took it one step at a time.",
-        "Quiet day, which is okay.",
         "Nothing exciting, but stable.",
         "Kept my head above water.",
-        "Low-key day. That's fine.",
         "Productive but a bit flat.",
-        "Didn't love it, didn't hate it.",
         "Somewhere in the middle.",
         "Functional. That counts.",
+        // ES
+        "Un día normal, sin más.",
+        "Tirando, como siempre.",
+        "Ni bien ni mal, la verdad.",
+        "Estuve ocupado/a pero lo manejé.",
+        "Un día tranquilo, sin novedades.",
+        "Nada especial, pero estable.",
+        "Sobreviví otro lunes.",
+        "Regular. Mañana será mejor.",
+        // FR
+        "Journée normale, rien de spécial.",
+        "On s'en sort.",
+        "Ni bien ni mal, quelque part au milieu.",
+        "Occupé(e) mais ça va.",
+        "Rien d'excitant, mais stable.",
+        "Journée productive mais un peu plate.",
+        "On fait ce qu'on peut.",
+        "Ça pourrait aller dans les deux sens.",
     ],
     4: [
+        // EN
         "Had a nice moment this morning.",
         "Good energy today.",
-        "Things are moving in the right direction.",
         "Grateful for small things.",
         "Coffee was perfect. Good start.",
         "Felt connected to people today.",
-        "Checked off a lot of tasks.",
         "Laughed a lot today.",
         "Feeling more like myself.",
         "Good conversation with a friend.",
         "The weather helped my mood.",
-        "Accomplished something I'd been putting off.",
         "Feeling settled and calm.",
         "Nice day overall.",
-        "Woke up before my alarm and felt ready.",
-        "Slow but steady progress.",
         "Found some peace in the chaos.",
+        // ES
+        "Tuve un lindo momento esta mañana.",
+        "Buena energía hoy, la verdad.",
+        "Agradecido/a por las cosas pequeñas.",
+        "El café estuvo perfecto. Buen comienzo.",
+        "Me sentí conectado/a con la gente hoy.",
+        "Me reí bastante hoy.",
+        "Me siento más yo mismo/a.",
+        "El clima ayudó mucho al humor.",
+        // FR
+        "J'ai eu un beau moment ce matin.",
+        "Bonne énergie aujourd'hui.",
+        "Reconnaissant(e) pour les petites choses.",
+        "Le café était parfait. Bon début.",
+        "Je me suis senti(e) connecté(e) aux autres.",
+        "J'ai beaucoup ri aujourd'hui.",
+        "Je me sens plus moi-même.",
+        "Le temps m'a aidé à me sentir mieux.",
     ],
     5: [
+        // EN
         "Genuinely happy today.",
         "Best day in a while.",
         "Everything clicked.",
         "Feeling alive.",
-        "On top of the world right now.",
         "Unexpected good news today.",
         "Feeling really grateful.",
         "High energy, high mood.",
-        "Something shifted and it feels great.",
         "Love days like this.",
         "Really present today.",
-        "Amazing morning run.",
         "Life is good. Simple as that.",
         "Feeling light, feeling free.",
-        "Celebrated a win with people I love.",
         "One of those rare days that just flows.",
-        "Radiant. Don't know why, don't care.",
+        // ES
+        "Genuinamente feliz hoy.",
+        "El mejor día en mucho tiempo.",
+        "Todo encajó perfecto hoy.",
+        "Buenas noticias que no esperaba.",
+        "Me siento muy agradecido/a.",
+        "Energía altísima, humor excelente.",
+        "Me siento vivo/a de verdad.",
+        "Días así son los que valen.",
+        // FR
+        "Vraiment heureux/heureuse aujourd'hui.",
+        "Meilleure journée depuis longtemps.",
+        "Tout s'est mis en place parfaitement.",
+        "Bonne nouvelle inattendue aujourd'hui.",
+        "Je me sens vraiment reconnaissant(e).",
+        "Plein(e) d'énergie et de bonne humeur.",
+        "Des jours comme ça, c'est la vie.",
+        "Légèreté et liberté aujourd'hui.",
     ],
 };
 
@@ -147,10 +219,17 @@ function pickCountry(): string {
     return weightedRandom(COUNTRY_POOL);
 }
 
-function pickNote(mood: number): string | null {
-    if (Math.random() > NOTE_RATE) return null;
-    const pool = NOTES[mood];
-    return pool[Math.floor(Math.random() * pool.length)];
+function makeNotePicker() {
+    const used = new Set<string>();
+    return function pickNote(mood: number): string | null {
+        if (Math.random() > NOTE_RATE) return null;
+        const pool = NOTES[mood];
+        const available = pool.filter((n) => !used.has(n));
+        if (available.length === 0) return null; // all notes for this mood exhausted
+        const note = available[Math.floor(Math.random() * available.length)];
+        used.add(note);
+        return note;
+    };
 }
 
 /**
@@ -191,6 +270,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
+        const pickNote = makeNotePicker();
         const rows = Array.from({ length: count }, (_, i) => {
             const mood = pickMood();
             const note = pickNote(mood);
