@@ -51,12 +51,6 @@ export function NoteCard({ note }: NoteCardProps) {
                     <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-500 dark:text-neutral-500">
                         <span>{moodData?.label}</span>
                         <span aria-hidden="true">·</span>
-                        <span>
-                            {note.country
-                                ? `${countryFlag(note.country)} ${note.country}`
-                                : 'Unknown'}
-                        </span>
-                        <span aria-hidden="true">·</span>
                         <span>{formatTime(note.created_at)}</span>
                     </div>
                 </div>
