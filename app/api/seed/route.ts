@@ -276,7 +276,7 @@ export async function GET(request: NextRequest) {
             const note = pickNote(mood);
             const country = pickCountry();
             const created_at = pickTimestamp(date, i, count);
-            return { mood, note, country, vote_date: date, created_at };
+            return { mood, note, country, vote_date: date, created_at, is_seed: true };
         });
 
         // Insert in batches of 100 to stay within Supabase limits
